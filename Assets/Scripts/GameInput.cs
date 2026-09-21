@@ -5,6 +5,7 @@ using UnityEngine.InputSystem;
 public class GameInput : MonoBehaviour
 {
     public event EventHandler OnJumpAction;
+    public event EventHandler OnInteractAction;
     private PlayerInputActions playerInputActions;
   private void Awake()
     {
@@ -18,9 +19,14 @@ public class GameInput : MonoBehaviour
     {
         OnJumpAction?.Invoke(this, EventArgs.Empty);
     }
+    private void Interact_performed(InputAction.CallbackContext obj)
+    {
+        OnInteractAction?.Invoke(this, EventArgs.Empty);
+    }
     private void OnDestroy()
     {
         playerInputActions.Player.Jump.performed -= Jump_performed;
+        playerInputActions.Player.Interact.performed -= Interact_performed;
         playerInputActions.Dispose();
     }
 

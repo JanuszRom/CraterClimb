@@ -1,14 +1,23 @@
 using UnityEngine;
+using System;
 
 public class Player : MonoBehaviour
 {
+    public static Player Instance { get; private set; }
     [SerializeField] private float moveSpeed = 7f;
     [SerializeField] private float rotateSpeed = 10f;
     [SerializeField] private float jumpHeight = 1.5f;
     [SerializeField] private GameInput gameInput;
     [SerializeField] private LayerMask groundLayer;
     [SerializeField] private Transform cameraTransform;
+    [SerializeField] private Camera playerCamera;
+    [SerializeField] private float selectRange = 10f;
 
+    public event EventHandler<OnSelectedWallChangedEventArgs> OnSelectedWallChanged;
+    public class OnSelectedWallChangedEventArgs : EventArgs
+    {
+        public BaseWall selectedWall;
+    }
     private const float GROUND_CHECK_RADIUS = .15f;
     private const float GROUND_CHECK_DISTANCE = .2f;
     private const float GRAVITY = -25f;
@@ -17,17 +26,24 @@ public class Player : MonoBehaviour
     private bool isWalking;
     private bool wasGrounded;
     private Vector3 lastMovementDir;
+    private BaseWall selectedWall;
 
     private void Awake()
     {
+        Instance = this;
         controller = GetComponent<CharacterController>();
     }
 
     private void Start()
     {
         gameInput.OnJumpAction += GameInput_OnJumpAction;
+        gameInput.OnInteractAction += GameInput_OnInteractAction;
     }
 
+    private void GameInput_OnInteractAction(object sender, System.EventArgs e)
+    {
+        // Handle interaction logic here
+    }
     private void GameInput_OnJumpAction(object sender, System.EventArgs e)
     {
         if (controller.isGrounded)
@@ -39,8 +55,35 @@ public class Player : MonoBehaviour
     private void Update()
     {
         HandleMovement();
+        HandleInteractions();
     }
 
+    private void HandleInteractions()
+    {
+        
+        Ray cameraRay = new Ray(playerCamera.transform.position, playerCamera.transform.forward);
+        
+        if (Physics.Raycast(cameraRay, out RaycastHit hit, selectRange, groundLayer /*, QueryTriggerInteraction.Ignore*/))
+        {
+           
+            if (hit.transform.TryGetComponent(out BaseWall baseWall))
+            {
+                if (baseWall != selectedWall) 
+                {
+                    SetSelectedWall(baseWall);
+                }
+            }
+            else
+            {
+                SetSelectedWall(null);
+            }
+        }
+        else
+        {
+            SetSelectedWall(null);
+          
+        }
+    }
     public void HandleMovement()
     {
         Vector2 inputVector = gameInput.GetMovementVectorNormalized();
@@ -79,6 +122,15 @@ public class Player : MonoBehaviour
         }
        
     }
+
+    private void SetSelectedWall(BaseWall selectedWall)
+    {
+        this.selectedWall = selectedWall;
+        OnSelectedWallChanged?.Invoke(this, new OnSelectedWallChangedEventArgs { selectedWall = selectedWall });
+        Debug.Log($"Selected Wall: {selectedWall?.name ?? "None"}");
+
+    }
+
     private bool CheckGrounded()
     {
         Vector3 origin = transform.position + Vector3.up * GROUND_CHECK_RADIUS;

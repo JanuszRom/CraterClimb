@@ -1,10 +1,9 @@
 using UnityEngine;
 
-public class WallMove : MonoBehaviour
+public class WallMove : BaseWall
 {
-    [SerializeField] private float moveSpeed = 2f;
-    [SerializeField] private Vector3 moveDistance = new Vector3(10f, 0f, 0f);
-    [SerializeField] private float moveTime = 50f;
+    
+   
 
     private Vector3 startPosition;
     private Vector3 targetPosition;
@@ -17,11 +16,12 @@ public class WallMove : MonoBehaviour
 
     private void Update()
     {
-        Move();
+        //Move();
     }
     
     private void Move()
     {
-        transform.position = Vector3.Lerp(startPosition, targetPosition, Mathf.PingPong(Time.time / moveTime, 1f));
+        transform.position = Vector3.MoveTowards(transform.position, targetPosition, moveSpeed * Time.deltaTime);
+        //transform.position = Vector3.Lerp(startPosition, targetPosition, Mathf.PingPong(Time.time / moveTime, 1f));
     }
 }
