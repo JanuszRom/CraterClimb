@@ -2,9 +2,9 @@ using UnityEngine;
 
 public class SelectedWallVisual : BaseWall
 {
-    [SerializeField] private BaseWall baseWall;
+    //[SerializeField] private BaseWall baseWall;
     [SerializeField] private GameObject SelectedVisual;
-
+    private BaseWall baseWall;
     private void Awake()
     {
         baseWall = this;

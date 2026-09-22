@@ -173,7 +173,7 @@ GameObject:
   - component: {fileID: 542055633856778176}
   - component: {fileID: 284521954385739020}
   - component: {fileID: 27265910001462128}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Cube_1x1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -287,5 +287,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::SelectedWallVisual
   moveSpeed: 2
   moveDistance: {x: 10, y: 0, z: 0}
-  baseWall: {fileID: 5825898790248895727}
   SelectedVisual: {fileID: 8282206212280782938}

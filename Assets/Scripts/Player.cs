@@ -8,7 +8,7 @@ public class Player : MonoBehaviour
     [SerializeField] private float rotateSpeed = 10f;
     [SerializeField] private float jumpHeight = 1.5f;
     [SerializeField] private GameInput gameInput;
-    [SerializeField] private LayerMask groundLayer;
+    [SerializeField] private LayerMask wallLayer;
     [SerializeField] private Transform cameraTransform;
     [SerializeField] private Camera playerCamera;
     [SerializeField] private float selectRange = 10f;
@@ -42,7 +42,10 @@ public class Player : MonoBehaviour
 
     private void GameInput_OnInteractAction(object sender, System.EventArgs e)
     {
-        // Handle interaction logic here
+        if (selectedWall != null)
+        {
+            selectedWall.Interact(this);
+        }
     }
     private void GameInput_OnJumpAction(object sender, System.EventArgs e)
     {
@@ -63,7 +66,7 @@ public class Player : MonoBehaviour
         
         Ray cameraRay = new Ray(playerCamera.transform.position, playerCamera.transform.forward);
         
-        if (Physics.Raycast(cameraRay, out RaycastHit hit, selectRange, groundLayer /*, QueryTriggerInteraction.Ignore*/))
+        if (Physics.Raycast(cameraRay, out RaycastHit hit, selectRange, wallLayer /*, QueryTriggerInteraction.Ignore*/))
         {
            
             if (hit.transform.TryGetComponent(out BaseWall baseWall))
@@ -134,7 +137,7 @@ public class Player : MonoBehaviour
     private bool CheckGrounded()
     {
         Vector3 origin = transform.position + Vector3.up * GROUND_CHECK_RADIUS;
-        return Physics.SphereCast(origin, GROUND_CHECK_RADIUS, Vector3.down, out _, GROUND_CHECK_DISTANCE, groundLayer, QueryTriggerInteraction.Ignore);
+        return Physics.SphereCast(origin, GROUND_CHECK_RADIUS, Vector3.down, out _, GROUND_CHECK_DISTANCE, wallLayer, QueryTriggerInteraction.Ignore);
     }
     private Vector3 GetCameraRelativeMoveDir(Vector2 inputVector)
     {
