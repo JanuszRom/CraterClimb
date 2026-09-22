@@ -1,11 +1,15 @@
+
+
 using UnityEngine;
+using System;
 
 public class Player : MonoBehaviour
 {
+    public static Player Instance { get; private set; }
     [SerializeField] private float moveSpeed = 7f;
-    [SerializeField] private float rotateSpeed = 7f;
+    [SerializeField] private float rotateSpeed = 10f;
+    [SerializeField] private float jumpHeight = 1.5f;
     [SerializeField] private GameInput gameInput;
-
     [SerializeField] private LayerMask wallLayer;
     [SerializeField] private Transform cameraTransform;
     [SerializeField] private Camera playerCamera;
@@ -43,7 +47,6 @@ public class Player : MonoBehaviour
         if (selectedWall != null)
         {
             selectedWall.Interact(this);
-            Debug.Log($"Interacted with {selectedWall.name}");
         }
     }
     private void GameInput_OnJumpAction(object sender, System.EventArgs e)
@@ -54,32 +57,99 @@ public class Player : MonoBehaviour
         }
     }
 
-
     private void Update()
     {
         HandleMovement();
+        HandleInteractions();
+    }
+
+    private void HandleInteractions()
+    {
+
+        Ray cameraRay = new Ray(playerCamera.transform.position, playerCamera.transform.forward);
+
+        if (Physics.Raycast(cameraRay, out RaycastHit hit, selectRange, wallLayer /*, QueryTriggerInteraction.Ignore*/))
+        {
+
+            if (hit.transform.TryGetComponent(out BaseWall baseWall))
+            {
+                if (baseWall != selectedWall)
+                {
+                    SetSelectedWall(baseWall);
+                }
+            }
+            else
+            {
+                SetSelectedWall(null);
+            }
+        }
+        else
+        {
+            SetSelectedWall(null);
+
+        }
     }
     public void HandleMovement()
     {
         Vector2 inputVector = gameInput.GetMovementVectorNormalized();
-        Vector3 moveDir = new Vector3(inputVector.x, 0f, inputVector.y);
+        Vector3 moveDir = GetCameraRelativeMoveDir(inputVector);
+        Vector3 moveDirReal = new Vector3(inputVector.x, 0f, inputVector.y);
 
-        float playerSize = .7f;
-        bool canMove = !Physics.Raycast(transform.position, moveDir, playerSize);
-        if (canMove)
+        isWalking = moveDir != Vector3.zero;
+        bool grounded = CheckGrounded();
+        if (moveDirReal != Vector3.zero)
         {
-            transform.position += moveDir * moveSpeed * Time.deltaTime;
+            lastMovementDir = moveDirReal;
         }
-        transform.forward = Vector3.Slerp(transform.forward, moveDir, Time.deltaTime * rotateSpeed);
 
-       
+
+
+        if (grounded && verticalVelocity < 0f)
+        {
+            verticalVelocity = -2f;
+        }
+        else if (wasGrounded && verticalVelocity <= 0f)
+        {
+
+            controller.Move(lastMovementDir * 0.5f + Vector3.down * 0.5f);
+
+
+        }
+
+
+        verticalVelocity += GRAVITY * Time.deltaTime;
+        Vector3 velocity = moveDir * moveSpeed + Vector3.up * verticalVelocity;
+        controller.Move(velocity * Time.deltaTime);
+        wasGrounded = grounded;
+
+        if (isWalking)
+        {
+            transform.forward = Vector3.Slerp(transform.forward, moveDir, Time.deltaTime * rotateSpeed);
+        }
+
     }
-    public void Jump()
-    {
 
+    private void SetSelectedWall(BaseWall selectedWall)
+    {
         this.selectedWall = selectedWall;
         OnSelectedWallChanged?.Invoke(this, new OnSelectedWallChangedEventArgs { selectedWall = selectedWall });
+        Debug.Log($"Selected Wall: {selectedWall?.name ?? "None"}");
 
+    }
 
+    private bool CheckGrounded()
+    {
+        Vector3 origin = transform.position + Vector3.up * GROUND_CHECK_RADIUS;
+        return Physics.SphereCast(origin, GROUND_CHECK_RADIUS, Vector3.down, out _, GROUND_CHECK_DISTANCE, wallLayer, QueryTriggerInteraction.Ignore);
+    }
+    private Vector3 GetCameraRelativeMoveDir(Vector2 inputVector)
+    {
+        Vector3 camForward = cameraTransform.forward;
+        Vector3 camRight = cameraTransform.right;
+        camForward.y = 0f;
+        camRight.y = 0f;
+        camForward.Normalize();
+        camRight.Normalize();
+        return camForward * inputVector.y + camRight * inputVector.x;
     }
 }
