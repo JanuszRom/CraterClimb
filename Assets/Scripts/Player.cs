@@ -5,8 +5,7 @@ public class Player : MonoBehaviour
     [SerializeField] private float moveSpeed = 7f;
     [SerializeField] private float rotateSpeed = 7f;
     [SerializeField] private GameInput gameInput;
-<<<<<<< Updated upstream
-=======
+
     [SerializeField] private LayerMask wallLayer;
     [SerializeField] private Transform cameraTransform;
     [SerializeField] private Camera playerCamera;
@@ -54,7 +53,7 @@ public class Player : MonoBehaviour
             verticalVelocity = Mathf.Sqrt(jumpHeight * -2f * GRAVITY);
         }
     }
->>>>>>> Stashed changes
+
 
     private void Update()
     {
@@ -77,12 +76,10 @@ public class Player : MonoBehaviour
     }
     public void Jump()
     {
-<<<<<<< Updated upstream
-=======
+
         this.selectedWall = selectedWall;
         OnSelectedWallChanged?.Invoke(this, new OnSelectedWallChangedEventArgs { selectedWall = selectedWall });
-       //Debug.Log($"Selected Wall: {selectedWall?.name ?? "None"}");
->>>>>>> Stashed changes
+
 
     }
 }
