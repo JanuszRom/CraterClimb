@@ -13,6 +13,7 @@ public class GameInput : MonoBehaviour
         playerInputActions = new PlayerInputActions();
         playerInputActions.Player.Enable();
         playerInputActions.Player.Jump.performed += Jump_performed;
+        playerInputActions.Player.Interact.performed += Interact_performed;
     }
 
     private void Jump_performed(InputAction.CallbackContext obj)

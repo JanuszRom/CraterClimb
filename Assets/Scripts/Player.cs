@@ -68,8 +68,10 @@ public class Player : MonoBehaviour
 
         Ray cameraRay = new Ray(playerCamera.transform.position, playerCamera.transform.forward);
 
-        if (Physics.Raycast(cameraRay, out RaycastHit hit, selectRange, wallLayer /*, QueryTriggerInteraction.Ignore*/))
-        {
+        
+
+        if (Physics.Raycast(cameraRay, out RaycastHit hit, selectRange, wallLayer, QueryTriggerInteraction.Ignore))
+        {   //Debug.Log($"Raycast hit: {hit.transform.name} at distance {hit.distance}");
 
             if (hit.transform.TryGetComponent(out BaseWall baseWall))
             {
@@ -133,7 +135,7 @@ public class Player : MonoBehaviour
     {
         this.selectedWall = selectedWall;
         OnSelectedWallChanged?.Invoke(this, new OnSelectedWallChangedEventArgs { selectedWall = selectedWall });
-        Debug.Log($"Selected Wall: {selectedWall?.name ?? "None"}");
+        //Debug.Log($"Selected Wall: {selectedWall?.name ?? "None"}");
 
     }
 
