@@ -21,7 +21,7 @@ public class Player : MonoBehaviour
         public BaseWall selectedWall;
     }
     private const float GROUND_CHECK_RADIUS = .15f;
-    private const float GROUND_CHECK_DISTANCE = .2f;
+    private const float GROUND_CHECK_DISTANCE = .5f;
     private const float GRAVITY = -25f;
     private CharacterController controller;
     private float verticalVelocity;
@@ -61,6 +61,7 @@ public class Player : MonoBehaviour
     {
         HandleMovement();
         HandleInteractions();
+       
     }
 
     private void HandleInteractions()
@@ -121,8 +122,13 @@ public class Player : MonoBehaviour
 
         verticalVelocity += GRAVITY * Time.deltaTime;
         Vector3 velocity = moveDir * moveSpeed + Vector3.up * verticalVelocity;
-        controller.Move(velocity * Time.deltaTime);
+        Vector3 totalMove = velocity * Time.deltaTime;
+
+       
+        
+        controller.Move(totalMove);
         wasGrounded = grounded;
+        
 
         if (isWalking)
         {
@@ -142,7 +148,8 @@ public class Player : MonoBehaviour
     private bool CheckGrounded()
     {
         Vector3 origin = transform.position + Vector3.up * GROUND_CHECK_RADIUS;
-        return Physics.SphereCast(origin, GROUND_CHECK_RADIUS, Vector3.down, out _, GROUND_CHECK_DISTANCE, wallLayer, QueryTriggerInteraction.Ignore);
+        return Physics.SphereCast(origin, GROUND_CHECK_RADIUS, Vector3.down, out RaycastHit hit, GROUND_CHECK_DISTANCE, wallLayer, QueryTriggerInteraction.Ignore);
+        
     }
     private Vector3 GetCameraRelativeMoveDir(Vector2 inputVector)
     {
@@ -154,4 +161,6 @@ public class Player : MonoBehaviour
         camRight.Normalize();
         return camForward * inputVector.y + camRight * inputVector.x;
     }
+
+
 }

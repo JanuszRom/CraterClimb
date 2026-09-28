@@ -10,10 +10,13 @@ public class SelectedWallVisual : BaseWall
     private Vector3 targetPosition;
     private bool IsMoving = false;
     private bool IsMovingBack = false;
+    private Vector3 lastPosition;
+    public Vector3 FrameDelta;
     private void Awake()
     {
         baseWall = this;
-       }
+        lastPosition = wallParent.position;
+    }
     private void Start()
     {
         
@@ -39,6 +42,9 @@ public class SelectedWallVisual : BaseWall
         {
             IsMoving = false;
         }
+        FrameDelta = wallParent.position - lastPosition;
+        lastPosition = wallParent.position;
+        //Debug.Log(FrameDelta);
     }
 
     private void Player_OnSelectedWallChanged(object sender, Player.OnSelectedWallChangedEventArgs e)
