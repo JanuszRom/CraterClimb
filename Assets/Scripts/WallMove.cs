@@ -11,6 +11,7 @@ public class WallMove : BaseWall
     public Vector3 FrameDelta { get; private set; }
     private bool isMoving = false;
     private bool isMovingBack = false;
+    private CharacterController playerOnPlatform;
 
     private void Awake()
     {
@@ -41,10 +42,20 @@ public class WallMove : BaseWall
         {
             isMoving = false;
         }
+        
+    }
+    private void LateUpdate()
+    {
         FrameDelta = transform.position - lastPosition;
         lastPosition = transform.position;
+
+        if (playerOnPlatform != null && FrameDelta != Vector3.zero)
+        {
+            playerOnPlatform.Move(FrameDelta);
+        }
     }
 
+    
     public override void Interact(Player player)
     {
      if (!isMoving && !isMovingBack)

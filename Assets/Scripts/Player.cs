@@ -72,8 +72,7 @@ public class Player : MonoBehaviour
         
 
         if (Physics.Raycast(cameraRay, out RaycastHit hit, selectRange, wallLayer, QueryTriggerInteraction.Ignore))
-        {   //Debug.Log($"Raycast hit: {hit.transform.name} at distance {hit.distance}");
-
+        {  
             if (hit.transform.TryGetComponent(out BaseWall baseWall))
             {
                 if (baseWall != selectedWall)
@@ -141,8 +140,6 @@ public class Player : MonoBehaviour
     {
         this.selectedWall = selectedWall;
         OnSelectedWallChanged?.Invoke(this, new OnSelectedWallChangedEventArgs { selectedWall = selectedWall });
-        //Debug.Log($"Selected Wall: {selectedWall?.name ?? "None"}");
-
     }
 
     private bool CheckGrounded()
