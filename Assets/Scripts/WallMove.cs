@@ -2,26 +2,79 @@ using UnityEngine;
 
 public class WallMove : BaseWall
 {
-    
-   
 
-    //private Vector3 startPosition;
-    //private Vector3 targetPosition;
 
-    //private void Start()
-    //{
-    //    startPosition = transform.position;
-    //    targetPosition = startPosition + moveDistance;
-    //}
 
-    //public override void Interact(Player player)
-    //{   Debug.Log("Interacting with WallMove");
-    //    Move();
-    //}
+    private Vector3 startPosition;
+    private Vector3 targetPosition;
+    private Vector3 lastPosition;
+    public Vector3 FrameDelta { get; private set; }
+    private bool isMoving = false;
+    private bool isMovingBack = false;
 
-    //public void Move()
-    //{
-    //    transform.position = Vector3.MoveTowards(transform.position, targetPosition, moveSpeed * Time.deltaTime);
-    //    //transform.position = Vector3.Lerp(startPosition, targetPosition, Mathf.PingPong(Time.time / moveTime, 1f));
-    //}
+    private void Awake()
+    {
+        lastPosition = transform.position;
+    }
+
+    private void Start()
+    {
+        startPosition = transform.position;
+        targetPosition = startPosition + moveDistance;
+    }
+
+    private void Update()
+    {
+        if (!isMoving && !isMovingBack)
+        {
+            return;
+        }
+        if (isMoving)
+        {
+            Move();
+        }
+        else if (isMovingBack)
+        {
+            MoveBack();
+        }
+        if (transform.position == targetPosition)
+        {
+            isMoving = false;
+        }
+        FrameDelta = transform.position - lastPosition;
+        lastPosition = transform.position;
+    }
+
+    public override void Interact(Player player)
+    {
+     if (!isMoving && !isMovingBack)
+        if (transform.position == startPosition)
+            {
+                isMoving = true;
+            }
+            else
+            {
+                isMovingBack = true;
+            }
+     else if (isMovingBack)
+        {
+            isMovingBack = false;
+            isMoving = true;
+        }
+     else
+        {
+            isMoving = false;
+            isMovingBack = true;
+        }
+    }
+
+   private void Move()
+    {
+        transform.position = Vector3.MoveTowards(transform.position, targetPosition, moveSpeed * Time.deltaTime);
+        
+    }
+    private void MoveBack()
+    {
+        transform.position = Vector3.MoveTowards(transform.position, startPosition, moveSpeed * Time.deltaTime);
+    }
 }
