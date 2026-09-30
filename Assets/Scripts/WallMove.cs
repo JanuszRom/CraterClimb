@@ -88,4 +88,17 @@ public class WallMove : BaseWall
     {
         transform.position = Vector3.MoveTowards(transform.position, startPosition, moveSpeed * Time.deltaTime);
     }
+
+    public void SetPlayerOnPlatform(CharacterController player)
+    {
+        playerOnPlatform = player;
+    }
+
+    public void ClearPlayerOnPlatform(CharacterController player)
+    {
+        if (playerOnPlatform == player)
+        {
+            playerOnPlatform = null;
+        }
+    }
 }

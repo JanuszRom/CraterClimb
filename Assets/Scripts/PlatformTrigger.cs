@@ -2,33 +2,25 @@ using UnityEngine;
 
 public class PlatformTrigger : MonoBehaviour
 {
+    [SerializeField] private WallMove wallParent;
     private CharacterController playerOnPlatform;
     private void OnTriggerEnter(Collider other)
     {
-
-        Debug.Log("Trigger Entered by:" + other.name);
+   
         CharacterController controller = other.GetComponentInParent<CharacterController>();
         if (controller != null)
         {
-            playerOnPlatform = controller;
+            wallParent.SetPlayerOnPlatform(controller);
             Debug.Log("Player on platform");
         }
-
-        //if (other.TryGetComponent(out CharacterController controller))
-        //{
-        //    playerOnPlatform = controller;
-        //    Debug.Log("Player on platform");
-        //}
-        //else
-        //{
-        //    Debug.Log("Nothing on platform");
-        //}
     }
     private void OnTriggerExit(Collider other)
     {
-        if (other.TryGetComponent(out CharacterController controller) && controller == playerOnPlatform)
+        CharacterController controller = other.GetComponentInParent<CharacterController>();
+        if (controller != null)
         {
-            playerOnPlatform = null;
+            wallParent.ClearPlayerOnPlatform(controller);
+            Debug.Log("Player left platform");
         }
     }
 }

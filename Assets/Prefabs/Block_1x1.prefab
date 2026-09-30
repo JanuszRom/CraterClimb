@@ -291,7 +291,7 @@ MonoBehaviour:
   moveSpeed: 2
   moveDistance: {x: 10, y: 0, z: 0}
   SelectedVisual: {fileID: 8282206212280782938}
-  wallMove: {fileID: 0}
+  wallMove: {fileID: 7066240862059335375}
 --- !u!54 &2139752798115525804
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -338,7 +338,7 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 0.99, y: 1.01, z: 0.99}
+  m_Size: {x: 0.99, y: 2.01, z: 0.99}
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &2580420323924119419
 MonoBehaviour:
@@ -352,3 +352,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fa05d3e9f3f4cc64d86661ab2e558239, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlatformTrigger
+  wallParent: {fileID: 7066240862059335375}
+  selectedWallVisual: {fileID: 186608374284351921}

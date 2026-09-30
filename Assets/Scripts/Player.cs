@@ -113,7 +113,7 @@ public class Player : MonoBehaviour
         else if (wasGrounded && verticalVelocity <= 0f)
         {
 
-            controller.Move(lastMovementDir * 0.5f + Vector3.down * 0.5f);
+            controller.Move(lastMovementDir * 0.5f + Vector3.down * 0.1f);
 
 
         }
