@@ -3567,11 +3567,9 @@ MonoBehaviour:
   cameraTransform: {fileID: 1956643127}
   playerCamera: {fileID: 330585545}
   selectRange: 10
-  wallRayDistance: 0.53
-  wallRayHeight: -1
-  wallPushStrength: 2.5
-  GROUND_CHECK_RADIUS: 0.15
-  GROUND_CHECK_DISTANCE: 0.5
+  wallRayDistance: 0.15
+  wallRayHeight: 0.5
+  wallPushStrength: 0.3
 --- !u!143 &1007224805
 CharacterController:
   m_ObjectHideFlags: 0

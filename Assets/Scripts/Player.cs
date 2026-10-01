@@ -15,13 +15,16 @@ public class Player : MonoBehaviour
     [SerializeField] private Camera playerCamera;
     [SerializeField] private float selectRange = 10f;
 
+    [SerializeField] private float wallRayDistance = 0.53f;
+    [SerializeField] private float wallRayHeight = -1f;
+    [SerializeField] private float wallPushStrength = 2.5f;
     public event EventHandler<OnSelectedWallChangedEventArgs> OnSelectedWallChanged;
     public class OnSelectedWallChangedEventArgs : EventArgs
     {
         public BaseWall selectedWall;
     }
-    private const float GROUND_CHECK_RADIUS = .15f;
-    private const float GROUND_CHECK_DISTANCE = .5f;
+    [SerializeField] private float GROUND_CHECK_RADIUS = .25f;
+    [SerializeField] private float GROUND_CHECK_DISTANCE = 1.1f;
     private const float GRAVITY = -25f;
     private CharacterController controller;
     private float verticalVelocity;
@@ -61,6 +64,8 @@ public class Player : MonoBehaviour
     {
         HandleMovement();
         HandleInteractions();
+        Debug.Log(CheckGrounded());
+        
        
     }
 
@@ -106,20 +111,39 @@ public class Player : MonoBehaviour
 
 
 
-        if (grounded && verticalVelocity < 0f)
+        //if (grounded && verticalVelocity < 0f)
+        //{
+        //    verticalVelocity = -2f;
+        //}
+        //else if (wasGrounded && verticalVelocity <= 0f)
+        //{
+
+        //    controller.Move(lastMovementDir * 0.8f * Time.deltaTime);
+
+
+        //}
+        if (grounded)
         {
-            verticalVelocity = -2f;
-        }
-        else if (wasGrounded && verticalVelocity <= 0f)
+            if (verticalVelocity < 0f)
+            {
+                verticalVelocity = -2f;
+            }
+        } else
         {
-
-            controller.Move(lastMovementDir * 0.5f + Vector3.down * 0.1f);
-
-
+            Vector3 wallPushDirection = GetWallPushDirection();
+            if (wallPushDirection != Vector3.zero)
+            {
+                verticalVelocity = 0f;
+                controller.Move(wallPushDirection * wallPushStrength * Time.deltaTime);
+            }
+            else
+            {
+                verticalVelocity += GRAVITY * Time.deltaTime;
+            }
         }
 
 
-        verticalVelocity += GRAVITY * Time.deltaTime;
+        //verticalVelocity += GRAVITY * Time.deltaTime;
         Vector3 velocity = moveDir * moveSpeed + Vector3.up * verticalVelocity;
         Vector3 totalMove = velocity * Time.deltaTime;
 
@@ -136,18 +160,50 @@ public class Player : MonoBehaviour
 
     }
 
+    private bool CheckGrounded()
+    {
+        Vector3 origin = transform.position + Vector3.up * GROUND_CHECK_RADIUS;
+        Debug.DrawRay(origin, Vector3.down * GROUND_CHECK_DISTANCE, Color.green);
+        return Physics.SphereCast(origin, GROUND_CHECK_RADIUS, Vector3.down, out RaycastHit hit, GROUND_CHECK_DISTANCE, wallLayer, QueryTriggerInteraction.Ignore);
+        
+    }
+
+    private Vector3 GetWallPushDirection()
+    {
+        Vector3 origin = transform.position + Vector3.up * wallRayHeight;
+        Vector3[] directions =
+        {
+                        transform.forward,
+            -transform.forward,
+            transform.right,
+            -transform.right,
+            (transform.forward + transform.right).normalized,
+            (transform.forward - transform.right).normalized,
+            (-transform.forward + transform.right).normalized,
+            (-transform.forward - transform.right).normalized
+
+        };
+        Vector3 pushDirection = Vector3.zero;
+        foreach (Vector3 direction in directions)
+        {
+            if (Physics.Raycast(origin, direction, out RaycastHit hit, wallRayDistance, wallLayer, QueryTriggerInteraction.Ignore))
+            {
+               if (Mathf.Abs(hit.normal.y) < 0.3f)
+                {
+                    pushDirection += hit.normal;
+                }
+            }
+            Debug.DrawRay(origin, direction * wallRayDistance, Color.red);
+        }
+        return pushDirection.normalized;
+    }
     private void SetSelectedWall(BaseWall selectedWall)
     {
         this.selectedWall = selectedWall;
         OnSelectedWallChanged?.Invoke(this, new OnSelectedWallChangedEventArgs { selectedWall = selectedWall });
     }
 
-    private bool CheckGrounded()
-    {
-        Vector3 origin = transform.position + Vector3.up * GROUND_CHECK_RADIUS;
-        return Physics.SphereCast(origin, GROUND_CHECK_RADIUS, Vector3.down, out RaycastHit hit, GROUND_CHECK_DISTANCE, wallLayer, QueryTriggerInteraction.Ignore);
-        
-    }
+    
     private Vector3 GetCameraRelativeMoveDir(Vector2 inputVector)
     {
         Vector3 camForward = cameraTransform.forward;
