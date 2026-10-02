@@ -3568,10 +3568,10 @@ MonoBehaviour:
   playerCamera: {fileID: 330585545}
   selectRange: 10
   wallRayDistance: 0.53
-  wallRayHeight: -1
+  wallRayHeight: -1.05
   wallPushStrength: 2.5
-  GROUND_CHECK_RADIUS: 0.15
-  GROUND_CHECK_DISTANCE: 0.5
+  GROUND_CHECK_RADIUS: 0.25
+  GROUND_CHECK_DISTANCE: 1.1
 --- !u!143 &1007224805
 CharacterController:
   m_ObjectHideFlags: 0

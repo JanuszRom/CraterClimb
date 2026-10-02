@@ -8,6 +8,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1223775149624364156, guid: c6907808bb3423c4a8c0e665b0fc2041, type: 3}
+      propertyPath: textureWorldSize
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 4900018428716534332, guid: c6907808bb3423c4a8c0e665b0fc2041, type: 3}
       propertyPath: m_LocalScale.y
       value: 2
