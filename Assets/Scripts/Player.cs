@@ -54,6 +54,7 @@ public class Player : MonoBehaviour
     }
     private void GameInput_OnJumpAction(object sender, System.EventArgs e)
     {
+        Debug.Log("Jump pressed. controller.isGrounded = " + controller.isGrounded);
         if (controller.isGrounded)
         {
             verticalVelocity = Mathf.Sqrt(jumpHeight * -2f * GRAVITY);
@@ -64,7 +65,7 @@ public class Player : MonoBehaviour
     {
         HandleMovement();
         HandleInteractions();
-        Debug.Log(CheckGrounded());
+        Debug.Log(GroundContact());
         
        
     }
@@ -110,18 +111,6 @@ public class Player : MonoBehaviour
         }
 
 
-
-        //if (grounded && verticalVelocity < 0f)
-        //{
-        //    verticalVelocity = -2f;
-        //}
-        //else if (wasGrounded && verticalVelocity <= 0f)
-        //{
-
-        //    controller.Move(lastMovementDir * 0.8f * Time.deltaTime);
-
-
-        //}
         if (grounded)
         {
             if (verticalVelocity < 0f)
@@ -142,8 +131,6 @@ public class Player : MonoBehaviour
             }
         }
 
-
-        //verticalVelocity += GRAVITY * Time.deltaTime;
         Vector3 velocity = moveDir * moveSpeed + Vector3.up * verticalVelocity;
         Vector3 totalMove = velocity * Time.deltaTime;
 
@@ -168,6 +155,10 @@ public class Player : MonoBehaviour
         
     }
 
+    public bool GroundContact()
+    {
+        return controller.isGrounded;
+    }
     private Vector3 GetWallPushDirection()
     {
         Vector3 origin = transform.position + Vector3.up * wallRayHeight;
@@ -214,6 +205,9 @@ public class Player : MonoBehaviour
         camRight.Normalize();
         return camForward * inputVector.y + camRight * inputVector.x;
     }
-
+    public bool IsWalking()
+    {
+        return isWalking;
+    }
 
 }
