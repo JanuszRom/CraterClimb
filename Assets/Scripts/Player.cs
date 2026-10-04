@@ -29,9 +29,12 @@ public class Player : MonoBehaviour
     private CharacterController controller;
     private float verticalVelocity;
     private bool isWalking;
+    private bool grounded;
     private bool wasGrounded;
     private Vector3 lastMovementDir;
     private BaseWall selectedWall;
+    private bool jumpRequested = false;
+    public float speed;
 
     private void Awake()
     {
@@ -54,20 +57,27 @@ public class Player : MonoBehaviour
     }
     private void GameInput_OnJumpAction(object sender, System.EventArgs e)
     {
-        Debug.Log("Jump pressed. controller.isGrounded = " + controller.isGrounded);
-        if (controller.isGrounded)
+        if (CheckGrounded())
         {
+            jumpRequested = true;
             verticalVelocity = Mathf.Sqrt(jumpHeight * -2f * GRAVITY);
+            
         }
+        //if (controller.isGrounded)
+        //{
+        //    verticalVelocity = Mathf.Sqrt(jumpHeight * -2f * GRAVITY);
+        //    jumpRequested = true;
+        //}
     }
 
     private void Update()
     {
         HandleMovement();
         HandleInteractions();
-        Debug.Log(GroundContact());
-        
-       
+        Debug.Log("GroundContact: " + GroundContact());
+        Debug.Log("JumpRequested: " + JumpRequested());
+
+
     }
 
     private void HandleInteractions()
@@ -103,6 +113,15 @@ public class Player : MonoBehaviour
         Vector3 moveDir = GetCameraRelativeMoveDir(inputVector);
         Vector3 moveDirReal = new Vector3(inputVector.x, 0f, inputVector.y);
 
+       if (inputVector != Vector2.zero)
+        {
+            speed = 1f;
+        }
+        else
+        {
+            speed = 0f;
+        }
+
         isWalking = moveDir != Vector3.zero;
         bool grounded = CheckGrounded();
         if (moveDirReal != Vector3.zero)
@@ -117,17 +136,27 @@ public class Player : MonoBehaviour
             {
                 verticalVelocity = -2f;
             }
-        } else
+            jumpRequested = false;
+        }
+        else
         {
-            Vector3 wallPushDirection = GetWallPushDirection();
-            if (wallPushDirection != Vector3.zero)
+            if (verticalVelocity > 0f)
             {
-                verticalVelocity = 0f;
-                controller.Move(wallPushDirection * wallPushStrength * Time.deltaTime);
+                verticalVelocity += GRAVITY * Time.deltaTime;
             }
             else
             {
-                verticalVelocity += GRAVITY * Time.deltaTime;
+
+                Vector3 wallPushDirection = GetWallPushDirection();
+                if (wallPushDirection != Vector3.zero)
+                {
+                    verticalVelocity = 0f;
+                    controller.Move(wallPushDirection * wallPushStrength * Time.deltaTime);
+                }
+                else
+                {
+                    verticalVelocity += GRAVITY * Time.deltaTime;
+                }
             }
         }
 
@@ -155,10 +184,18 @@ public class Player : MonoBehaviour
         
     }
 
+
     public bool GroundContact()
     {
-        return controller.isGrounded;
+        //return controller.isGrounded;
+        return CheckGrounded();
     }
+    public bool JumpRequested()
+    {
+        return jumpRequested;
+    }
+  
+  
     private Vector3 GetWallPushDirection()
     {
         Vector3 origin = transform.position + Vector3.up * wallRayHeight;
