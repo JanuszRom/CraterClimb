@@ -16,7 +16,7 @@ public class PlayerAnimator : MonoBehaviour
     }
     private void Update()
     {
-        animator.SetFloat(FORWARD_SPEED, player.speed);
+        animator.SetFloat(FORWARD_SPEED, player.targetSpeed, 0.2f, Time.deltaTime);
         animator.SetBool(GROUND_CONTACT, player.GroundContact());
         animator.SetBool(JUMP_REQUESTED, player.JumpRequested());
     }

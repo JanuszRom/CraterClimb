@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1001 &3500078485761251788
+--- !u!1001 &2075791137389968430
 PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
@@ -8,21 +8,13 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 186608374284351921, guid: c6907808bb3423c4a8c0e665b0fc2041, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 0.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 1223775149624364156, guid: c6907808bb3423c4a8c0e665b0fc2041, type: 3}
-      propertyPath: textureWorldSize
-      value: 2
-      objectReference: {fileID: 0}
     - target: {fileID: 4900018428716534332, guid: c6907808bb3423c4a8c0e665b0fc2041, type: 3}
       propertyPath: m_LocalScale.y
-      value: 2
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 4900018428716534332, guid: c6907808bb3423c4a8c0e665b0fc2041, type: 3}
       propertyPath: m_LocalScale.z
-      value: 2
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 4900018428716534332, guid: c6907808bb3423c4a8c0e665b0fc2041, type: 3}
       propertyPath: m_LocalPosition.x
@@ -64,17 +56,13 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 7211907299855034811, guid: c6907808bb3423c4a8c0e665b0fc2041, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 0.5
-      objectReference: {fileID: 0}
     - target: {fileID: 8075382972778673405, guid: c6907808bb3423c4a8c0e665b0fc2041, type: 3}
       propertyPath: m_Name
-      value: Block_2x2
+      value: Block_6x6
       objectReference: {fileID: 0}
     - target: {fileID: 8397252167057176925, guid: c6907808bb3423c4a8c0e665b0fc2041, type: 3}
       propertyPath: m_Name
-      value: Cube_2x2
+      value: Cube_6x6
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

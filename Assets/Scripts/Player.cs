@@ -18,6 +18,8 @@ public class Player : MonoBehaviour
     [SerializeField] private float wallRayDistance = 0.53f;
     [SerializeField] private float wallRayHeight = -1f;
     [SerializeField] private float wallPushStrength = 2.5f;
+    [SerializeField] private float wallFallSpeed = 1.5f;
+    [SerializeField] private float gravityMultiplier = 2f;
     public event EventHandler<OnSelectedWallChangedEventArgs> OnSelectedWallChanged;
     public class OnSelectedWallChangedEventArgs : EventArgs
     {
@@ -34,7 +36,8 @@ public class Player : MonoBehaviour
     private Vector3 lastMovementDir;
     private BaseWall selectedWall;
     private bool jumpRequested = false;
-    public float speed;
+    public float targetSpeed;
+    
 
     private void Awake()
     {
@@ -115,11 +118,11 @@ public class Player : MonoBehaviour
 
        if (inputVector != Vector2.zero)
         {
-            speed = 1f;
+            targetSpeed = 1f;
         }
         else
         {
-            speed = 0f;
+            targetSpeed = 0f;
         }
 
         isWalking = moveDir != Vector3.zero;
@@ -150,12 +153,12 @@ public class Player : MonoBehaviour
                 Vector3 wallPushDirection = GetWallPushDirection();
                 if (wallPushDirection != Vector3.zero)
                 {
-                    verticalVelocity = 0f;
                     controller.Move(wallPushDirection * wallPushStrength * Time.deltaTime);
+                    verticalVelocity -= wallFallSpeed;
                 }
                 else
                 {
-                    verticalVelocity += GRAVITY * Time.deltaTime;
+                    verticalVelocity += GRAVITY * Time.deltaTime * gravityMultiplier;
                 }
             }
         }
