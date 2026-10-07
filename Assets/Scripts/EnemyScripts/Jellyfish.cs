@@ -3,25 +3,27 @@ using UnityEngine;
 
 public class Jellyfish : BaseEnemy
 {
-    [SerializeField] private float minUpwardForce = 2f;
+    [SerializeField] private float minUpwardForce = 3f;
     [SerializeField] private float maxUpwardForce = 5f;
     [SerializeField] private float minForwardForce = -3f;
     [SerializeField] private float maxForwardForce = 3f;
-    [SerializeField] private float flapInterval = 2f;
+    [SerializeField] private float flapInterval = 2.5f;
+    [SerializeField] private float detectionInterval = 2f;
     [SerializeField] private Transform body;
-    [SerializeField] private float gravity = 5f;
-    [SerializeField] private float detectionRayTop = 1f;
+    [SerializeField] private float gravity = 3f;
+    [SerializeField] private float detectionRayTop = 2f;
     [SerializeField] private float detectionRayMiddle = 0f;
-    [SerializeField] private float detectionRayBottom = -1f;
-    [SerializeField] private float detectionDistance = 3f;
+    [SerializeField] private float detectionRayBottom = -2f;
+    [SerializeField] private float detectionDistance = 2f;
     [SerializeField] private LayerMask wallLayer;
     private Rigidbody rb;
     private float flapTimer;
+    private float detectionTimer;
     private float upwardForce;
 
     private void Awake()
     {
-        rb = body.GetComponent<Rigidbody>();
+        rb = GetComponent<Rigidbody>();
     }
 
     private void FixedUpdate()
@@ -38,7 +40,8 @@ public class Jellyfish : BaseEnemy
         flapTimer -= Time.fixedDeltaTime;
         if (flapTimer <= 0f)
         {
-            velocity.y = 0f;
+            velocity = Vector3.zero;
+              
             rb.linearVelocity = velocity;
             rb.AddForce(Vector3.up * upwardForce, ForceMode.Impulse);
             rb.AddForce(Vector3.forward * Random.Range(minForwardForce, maxForwardForce), ForceMode.Impulse);
@@ -65,19 +68,25 @@ public class Jellyfish : BaseEnemy
             (-transform.forward - transform.right).normalized
 
         };
-
-        foreach (Vector3 origin in origins)
+        detectionTimer -= Time.fixedDeltaTime;
+        if (detectionTimer <= 0f)
         {
-            foreach (Vector3 direction in directions)
+
+            foreach (Vector3 origin in origins)
             {
-                if (Physics.Raycast(origin, direction, out RaycastHit hit, detectionDistance, wallLayer, QueryTriggerInteraction.Ignore))
-                
+                foreach (Vector3 direction in directions)
+                {
+                    if (Physics.Raycast(origin, direction, out RaycastHit hit, detectionDistance, wallLayer, QueryTriggerInteraction.Ignore))
+
                     {
+                        Debug.Log("Obstacle detected");
                         rb.AddForce(direction * Random.Range(minForwardForce, maxForwardForce), ForceMode.Impulse);
-                        flapInterval = 0;
+                        //flapInterval = 0;
+                        detectionTimer = detectionInterval;
                     }
-                
-                Debug.DrawRay(origin, direction * detectionDistance, Color.red);
+
+                    Debug.DrawRay(origin, direction * detectionDistance, Color.red);
+                }
             }
         }
     }

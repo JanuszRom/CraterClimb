@@ -2845,7 +2845,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 6, y: 6, z: 6}
+  m_LocalScale: {x: 10, y: 10, z: 10}
   m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 0}
@@ -4033,6 +4033,7 @@ GameObject:
   m_Component:
   - component: {fileID: 39819234}
   - component: {fileID: 39819235}
+  - component: {fileID: 39819236}
   m_Layer: 0
   m_Name: Jellyfish
   m_TagString: Untagged
@@ -4049,7 +4050,7 @@ Transform:
   m_GameObject: {fileID: 39819233}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -15, y: 1.5, z: 5}
+  m_LocalPosition: {x: 0, y: 1.5, z: 5}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -4068,15 +4069,49 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 16dc6bfa86081754b9cfe7a9f1be49ea, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Jellyfish
-  moveSpeed: 2
   maxHealth: 100
   minUpwardForce: 3
   maxUpwardForce: 5
   minForwardForce: -3
   maxForwardForce: 3
   flapInterval: 2.5
+  detectionInterval: 2
   body: {fileID: 1098625015}
   gravity: 3
+  detectionRayTop: 2
+  detectionRayMiddle: 0
+  detectionRayBottom: -2
+  detectionDistance: 2
+  wallLayer:
+    serializedVersion: 2
+    m_Bits: 64
+--- !u!54 &39819236
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 39819233}
+  serializedVersion: 5
+  m_Mass: 1
+  m_LinearDamping: 0
+  m_AngularDamping: 0.05
+  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ImplicitCom: 1
+  m_ImplicitTensor: 1
+  m_UseGravity: 0
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
 --- !u!1 &40628774
 GameObject:
   m_ObjectHideFlags: 0
@@ -97573,7 +97608,6 @@ GameObject:
   - component: {fileID: 1098625019}
   - component: {fileID: 1098625018}
   - component: {fileID: 1098625017}
-  - component: {fileID: 1098625016}
   m_Layer: 0
   m_Name: Sphere
   m_TagString: Untagged
@@ -97596,33 +97630,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 39819234}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!54 &1098625016
-Rigidbody:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1098625014}
-  serializedVersion: 5
-  m_Mass: 1
-  m_LinearDamping: 0
-  m_AngularDamping: 0.05
-  m_CenterOfMass: {x: 0, y: 0, z: 0}
-  m_InertiaTensor: {x: 1, y: 1, z: 1}
-  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ImplicitCom: 1
-  m_ImplicitTensor: 1
-  m_UseGravity: 0
-  m_IsKinematic: 0
-  m_Interpolate: 0
-  m_Constraints: 0
-  m_CollisionDetection: 0
 --- !u!135 &1098625017
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -197035,8 +197042,8 @@ SceneRoots:
   - {fileID: 832575519}
   - {fileID: 29614344}
   - {fileID: 1735683406}
+  - {fileID: 39819234}
   - {fileID: 1007224803}
   - {fileID: 1956643127}
   - {fileID: 382348918}
   - {fileID: 646226309}
-  - {fileID: 39819234}
