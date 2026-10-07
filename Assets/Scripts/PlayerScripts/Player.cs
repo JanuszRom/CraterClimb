@@ -77,8 +77,8 @@ public class Player : MonoBehaviour
     {
         HandleMovement();
         HandleInteractions();
-        Debug.Log("GroundContact: " + GroundContact());
-        Debug.Log("JumpRequested: " + JumpRequested());
+        //Debug.Log("GroundContact: " + GroundContact());
+        //Debug.Log("JumpRequested: " + JumpRequested());
 
 
     }
