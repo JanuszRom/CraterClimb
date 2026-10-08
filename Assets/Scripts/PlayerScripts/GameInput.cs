@@ -6,6 +6,8 @@ public class GameInput : MonoBehaviour
 {
     public event EventHandler OnJumpAction;
     public event EventHandler OnInteractAction;
+    public event Action<bool> OnAim;
+
     private PlayerInputActions playerInputActions;
     private void Awake()
     {
@@ -14,6 +16,16 @@ public class GameInput : MonoBehaviour
         playerInputActions.Player.Enable();
         playerInputActions.Player.Jump.performed += Jump_performed;
         playerInputActions.Player.Interact.performed += Interact_performed;
+        playerInputActions.Player.Aim.performed += Aim_performed;
+        playerInputActions.Player.Aim.canceled += Aim_canceled;
+    }
+    private void Aim_performed(InputAction.CallbackContext obj)
+    {
+        OnAim?.Invoke(true);
+    }
+    private void Aim_canceled(InputAction.CallbackContext obj)
+    {
+        OnAim?.Invoke(false);
     }
 
     private void Jump_performed(InputAction.CallbackContext obj)
@@ -28,6 +40,7 @@ public class GameInput : MonoBehaviour
     {
         playerInputActions.Player.Jump.performed -= Jump_performed;
         playerInputActions.Player.Interact.performed -= Interact_performed;
+        playerInputActions.Player.Aim.performed -= Aim_performed;
         playerInputActions.Dispose();
     }
 

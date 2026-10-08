@@ -2,6 +2,7 @@
 
 using UnityEngine;
 using System;
+using Unity.Cinemachine;
 
 public class Player : MonoBehaviour
 {
@@ -13,6 +14,7 @@ public class Player : MonoBehaviour
     [SerializeField] private LayerMask wallLayer;
     [SerializeField] private Transform cameraTransform;
     [SerializeField] private Camera playerCamera;
+    [SerializeField] private CinemachineCamera AimingCamera;
     [SerializeField] private float selectRange = 10f;
 
     [SerializeField] private float wallRayDistance = 0.53f;
@@ -20,6 +22,7 @@ public class Player : MonoBehaviour
     [SerializeField] private float wallPushStrength = 2.5f;
     [SerializeField] private float wallFallSpeed = 1.5f;
     [SerializeField] private float gravityMultiplier = 2f;
+   
     public event EventHandler<OnSelectedWallChangedEventArgs> OnSelectedWallChanged;
     public class OnSelectedWallChangedEventArgs : EventArgs
     {
@@ -37,7 +40,8 @@ public class Player : MonoBehaviour
     private BaseWall selectedWall;
     private bool jumpRequested = false;
     public float targetSpeed;
-    
+    private bool isAiming = false;
+
 
     private void Awake()
     {
@@ -49,6 +53,8 @@ public class Player : MonoBehaviour
     {
         gameInput.OnJumpAction += GameInput_OnJumpAction;
         gameInput.OnInteractAction += GameInput_OnInteractAction;
+        gameInput.OnAim += GameInput_OnAim;
+
     }
 
     private void GameInput_OnInteractAction(object sender, System.EventArgs e)
@@ -58,6 +64,12 @@ public class Player : MonoBehaviour
             selectedWall.Interact(this);
         }
     }
+    private void GameInput_OnAim(bool isAiming)
+    {
+        this.isAiming = isAiming;
+        AimingCamera.Priority = isAiming ? 20 : 0;
+    }
+   
     private void GameInput_OnJumpAction(object sender, System.EventArgs e)
     {
         if (CheckGrounded())
@@ -66,21 +78,15 @@ public class Player : MonoBehaviour
             verticalVelocity = Mathf.Sqrt(jumpHeight * -2f * GRAVITY);
             
         }
-        //if (controller.isGrounded)
-        //{
-        //    verticalVelocity = Mathf.Sqrt(jumpHeight * -2f * GRAVITY);
-        //    jumpRequested = true;
-        //}
+  
     }
 
     private void Update()
     {
         HandleMovement();
         HandleInteractions();
-        //Debug.Log("GroundContact: " + GroundContact());
-        //Debug.Log("JumpRequested: " + JumpRequested());
-
-
+       
+        Debug.Log(AimingCamera.Priority);
     }
 
     private void HandleInteractions()
@@ -187,6 +193,7 @@ public class Player : MonoBehaviour
         
     }
 
+    
 
     public bool GroundContact()
     {
