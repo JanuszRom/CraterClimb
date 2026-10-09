@@ -3,6 +3,7 @@
 using UnityEngine;
 using System;
 using Unity.Cinemachine;
+using Unity.VisualScripting;
 
 public class Player : MonoBehaviour
 {
@@ -15,7 +16,6 @@ public class Player : MonoBehaviour
     [SerializeField] private Transform cameraTransform;
     [SerializeField] private Camera playerCamera;
     [SerializeField] private CameraTarget cameraTarget;
-    //[SerializeField] private CinemachineCamera AimingCamera;
     [SerializeField] private float aimTurnSpeed = 1080f;
     [SerializeField] private float selectRange = 10f;
 
@@ -24,7 +24,9 @@ public class Player : MonoBehaviour
     [SerializeField] private float wallPushStrength = 2.5f;
     [SerializeField] private float wallFallSpeed = 1.5f;
     [SerializeField] private float gravityMultiplier = 2f;
-   
+    [SerializeField] private float hardLandSpeed = 5f;
+    [SerializeField] private float landRecoveryTime = .15f;
+
     public event EventHandler<OnSelectedWallChangedEventArgs> OnSelectedWallChanged;
     public class OnSelectedWallChangedEventArgs : EventArgs
     {
@@ -46,6 +48,7 @@ public class Player : MonoBehaviour
     public bool isAiming = false;
     public float aimX;
     public float aimY;
+    private float landRecoveryTimer;
 
 
     private void Awake()
@@ -73,7 +76,6 @@ public class Player : MonoBehaviour
     {
         this.isAiming = isAiming;
         cameraTarget.SetAiming(isAiming);
-        //AimingCamera.Priority = isAiming ? 20 : 0;
     }
    
     private void GameInput_OnJumpAction(object sender, System.EventArgs e)
@@ -91,8 +93,7 @@ public class Player : MonoBehaviour
     {
         HandleMovement();
         HandleInteractions();
-       
-  
+
     }
 
     private void HandleInteractions()
@@ -119,7 +120,6 @@ public class Player : MonoBehaviour
         else
         {
             SetSelectedWall(null);
-
         }
     }
     public void HandleMovement()
@@ -141,13 +141,17 @@ public class Player : MonoBehaviour
         }
 
         isWalking = moveDir != Vector3.zero;
-        bool grounded = CheckGrounded();
+       
         if (moveDirReal != Vector3.zero)
         {
             lastMovementDir = moveDirReal;
         }
+        bool grounded = CheckGrounded();
 
-
+        if (grounded && !wasGrounded && verticalVelocity < -hardLandSpeed)
+        {
+            landRecoveryTimer = landRecoveryTime;
+        }
         if (grounded)
         {
             if (verticalVelocity < 0f)
@@ -177,8 +181,13 @@ public class Player : MonoBehaviour
                 }
             }
         }
-
-        Vector3 velocity = moveDir * moveSpeed + Vector3.up * verticalVelocity;
+        float moveFactor = 1f;
+        if (landRecoveryTimer > 0f)
+        {
+            landRecoveryTimer -= Time.deltaTime;
+            moveFactor = 1f - Mathf.Clamp01(landRecoveryTimer / landRecoveryTime);
+        }
+            Vector3 velocity = moveDir * (moveSpeed * moveFactor) + Vector3.up * verticalVelocity;
         Vector3 totalMove = velocity * Time.deltaTime;
 
        
