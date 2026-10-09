@@ -14,7 +14,9 @@ public class Player : MonoBehaviour
     [SerializeField] private LayerMask wallLayer;
     [SerializeField] private Transform cameraTransform;
     [SerializeField] private Camera playerCamera;
-    [SerializeField] private CinemachineCamera AimingCamera;
+    [SerializeField] private CameraTarget cameraTarget;
+    //[SerializeField] private CinemachineCamera AimingCamera;
+    [SerializeField] private float aimTurnSpeed = 1080f;
     [SerializeField] private float selectRange = 10f;
 
     [SerializeField] private float wallRayDistance = 0.53f;
@@ -37,6 +39,7 @@ public class Player : MonoBehaviour
     private bool grounded;
     private bool wasGrounded;
     private Vector3 lastMovementDir;
+    private Vector3 moveDir;
     private BaseWall selectedWall;
     private bool jumpRequested = false;
     public float targetSpeed;
@@ -67,7 +70,8 @@ public class Player : MonoBehaviour
     private void GameInput_OnAim(bool isAiming)
     {
         this.isAiming = isAiming;
-        AimingCamera.Priority = isAiming ? 20 : 0;
+        cameraTarget.SetAiming(isAiming);
+        //AimingCamera.Priority = isAiming ? 20 : 0;
     }
    
     private void GameInput_OnJumpAction(object sender, System.EventArgs e)
@@ -86,7 +90,7 @@ public class Player : MonoBehaviour
         HandleMovement();
         HandleInteractions();
        
-        Debug.Log(AimingCamera.Priority);
+  
     }
 
     private void HandleInteractions()
@@ -119,7 +123,7 @@ public class Player : MonoBehaviour
     public void HandleMovement()
     {
         Vector2 inputVector = gameInput.GetMovementVectorNormalized();
-        Vector3 moveDir = GetCameraRelativeMoveDir(inputVector);
+        moveDir = GetCameraRelativeMoveDir(inputVector);
         Vector3 moveDirReal = new Vector3(inputVector.x, 0f, inputVector.y);
 
        if (inputVector != Vector2.zero)
@@ -175,14 +179,28 @@ public class Player : MonoBehaviour
        
         
         controller.Move(totalMove);
+        HandleRotation();
         wasGrounded = grounded;
         
 
-        if (isWalking)
+        //if (isWalking)
+        //{
+        //    transform.forward = Vector3.Slerp(transform.forward, moveDir, Time.deltaTime * rotateSpeed);
+        //}
+
+    }
+
+    private void HandleRotation()
+    {
+        if (isAiming)
+        {
+            Quaternion target = Quaternion.Euler(0f, cameraTarget.Yaw, 0f);
+            transform.rotation = Quaternion.RotateTowards(transform.rotation, target, aimTurnSpeed * Time.deltaTime);
+        }
+        else if (isWalking)
         {
             transform.forward = Vector3.Slerp(transform.forward, moveDir, Time.deltaTime * rotateSpeed);
         }
-
     }
 
     private bool CheckGrounded()
