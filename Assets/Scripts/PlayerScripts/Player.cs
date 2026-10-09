@@ -43,7 +43,9 @@ public class Player : MonoBehaviour
     private BaseWall selectedWall;
     private bool jumpRequested = false;
     public float targetSpeed;
-    private bool isAiming = false;
+    public bool isAiming = false;
+    public float aimX;
+    public float aimY;
 
 
     private void Awake()
@@ -126,7 +128,10 @@ public class Player : MonoBehaviour
         moveDir = GetCameraRelativeMoveDir(inputVector);
         Vector3 moveDirReal = new Vector3(inputVector.x, 0f, inputVector.y);
 
-       if (inputVector != Vector2.zero)
+        aimX = inputVector.x;
+        aimY = inputVector.y;
+
+        if (inputVector != Vector2.zero)
         {
             targetSpeed = 1f;
         }
@@ -182,12 +187,6 @@ public class Player : MonoBehaviour
         HandleRotation();
         wasGrounded = grounded;
         
-
-        //if (isWalking)
-        //{
-        //    transform.forward = Vector3.Slerp(transform.forward, moveDir, Time.deltaTime * rotateSpeed);
-        //}
-
     }
 
     private void HandleRotation()
@@ -215,7 +214,6 @@ public class Player : MonoBehaviour
 
     public bool GroundContact()
     {
-        //return controller.isGrounded;
         return CheckGrounded();
     }
     public bool JumpRequested()
