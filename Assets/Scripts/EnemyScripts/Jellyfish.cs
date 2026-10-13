@@ -80,7 +80,7 @@ public class Jellyfish : BaseEnemy
 
                     {
                         Debug.Log("Obstacle detected");
-                        rb.AddForce(direction * Random.Range(minForwardForce, maxForwardForce), ForceMode.Impulse);
+                        //rb.AddForce(direction * Random.Range(minForwardForce, maxForwardForce), ForceMode.Impulse);
                         //flapInterval = 0;
                         detectionTimer = detectionInterval;
                     }

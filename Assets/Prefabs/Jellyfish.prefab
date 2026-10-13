@@ -47,11 +47,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Jellyfish
   maxHealth: 100
-  minUpwardForce: 3
-  maxUpwardForce: 5
+  minUpwardForce: 5
+  maxUpwardForce: 8
   minForwardForce: -3
   maxForwardForce: 3
-  flapInterval: 2.5
+  flapInterval: 4
   detectionInterval: 2
   body: {fileID: 6884142563529919271}
   gravity: 3
@@ -160,7 +160,7 @@ MeshRenderer:
     firstSubMesh: 0
     subMeshCount: 0
   m_StaticBatchRoot: {fileID: 0}
-  m_ProbeAnchor: {fileID: 0}
+  m_ProbeAnchor: {fileID: 6884142563529919271}
   m_LightProbeVolumeOverride: {fileID: 0}
   m_ScaleInLightmap: 1
   m_ReceiveGI: 1
@@ -244,6 +244,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 474f1eecadbc67c4480f8ada7199451d, type: 3}
       insertIndex: -1
       addedObject: {fileID: 5607005241959496004}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 474f1eecadbc67c4480f8ada7199451d, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 8872294881815821209}
     - targetCorrespondingSourceObject: {fileID: -7254862414372757081, guid: 474f1eecadbc67c4480f8ada7199451d, type: 3}
       insertIndex: -1
       addedObject: {fileID: 454465998185245337}
@@ -315,6 +318,28 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::JellyfishAnimator
   jellyfish: {fileID: 8879596650448225777}
+--- !u!64 &8872294881815821209
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6107641529561076125}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 5
+  m_Convex: 1
+  m_CookingOptions: 30
+  m_Mesh: {fileID: -7748657787803452223, guid: 474f1eecadbc67c4480f8ada7199451d, type: 3}
 --- !u!4 &6884142563529919271 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 474f1eecadbc67c4480f8ada7199451d, type: 3}
