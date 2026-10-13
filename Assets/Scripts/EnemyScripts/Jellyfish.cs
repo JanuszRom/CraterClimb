@@ -90,4 +90,8 @@ public class Jellyfish : BaseEnemy
             }
         }
     }
+    public float FlapTimer()
+    {
+        return flapTimer;
+    }
 }
