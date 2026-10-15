@@ -327,10 +327,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::JellyfishVisualTilt
   rb: {fileID: 996216286977712818}
   visualPivot: {fileID: 6884142563529919271}
-  maxPitch: 30
-  maxRoll: 15
-  maxHorizontalSpeed: 10
-  tiltResponsiveness: 10
+  maxPitch: 50
+  maxRoll: 50
+  maxHorizontalSpeed: 5
+  tiltResponsiveness: 5
 --- !u!4 &6884142563529919271 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 474f1eecadbc67c4480f8ada7199451d, type: 3}
