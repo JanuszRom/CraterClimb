@@ -149,8 +149,7 @@ MeshRenderer:
   m_MeshLodSelectionBias: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
-  m_Materials:
-  - {fileID: 0}
+  m_Materials: []
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -226,6 +225,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Jellyfish1
       objectReference: {fileID: 0}
+    - target: {fileID: 1814153662081379798, guid: 474f1eecadbc67c4480f8ada7199451d, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: e61c97275e1fc094eab1460c7f5fc342, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects:
