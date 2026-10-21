@@ -1,0 +1,71 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 44c897e5ed5f911419539bad02e9b23f, type: 3}
+  m_Name: LevelPalette
+  m_EditorClassIdentifier: Assembly-CSharp::LevelPalette
+  standardBlocks:
+  - size: 1
+    prefab: {fileID: 8075382972778673405, guid: c6907808bb3423c4a8c0e665b0fc2041, type: 3}
+  - size: 2
+    prefab: {fileID: 4648630510535093553, guid: 25ad21447a38da14aadfeb61284c1bf4, type: 3}
+  - size: 4
+    prefab: {fileID: 2174515766910964877, guid: b8030f8917f3a9e4cb96116248323d54, type: 3}
+  - size: 4
+    prefab: {fileID: 7845049608395655379, guid: b234c6b70e033d64ab6b8b59675344f9, type: 3}
+  structures:
+  - id: Exit
+    prefab: {fileID: 4487999401744476733, guid: 79e49280e8584624282d2bb46341bf6f, type: 3}
+    width: 3
+    height: 4
+    freeCells:
+    - {x: 0, y: 0}
+    - {x: 2, y: 0}
+    - {x: 0, y: 3}
+    - {x: 2, y: 3}
+    entryCells:
+    - {x: 1, y: 1}
+    allowMirror: 1
+  - id: StartPlatform
+    prefab: {fileID: 4780416856777489683, guid: 4619367e5b229684c9271d83a2768e24, type: 3}
+    width: 3
+    height: 1
+    freeCells: []
+    entryCells:
+    - {x: 0, y: 0}
+    allowMirror: 1
+  - id: KeyPlatform
+    prefab: {fileID: 4780416856777489683, guid: 37c199e14aca5574b980b9320a1bd66b, type: 3}
+    width: 3
+    height: 1
+    freeCells: []
+    entryCells:
+    - {x: 1, y: 0}
+    allowMirror: 1
+  variants:
+  - id: Block_1x1_unmovable
+    prefab: {fileID: 4345306969432709685, guid: 965d5a7ec06aa324584a4e4d7182e4d8, type: 3}
+    size: 1
+    minPerLevel: 10
+    maxPerLevel: 25
+    allowedOnPaths: 0
+  - id: Block_2x2_unmovable
+    prefab: {fileID: 8368452078751255369, guid: 6e03cc124a94a2b4cb1215aa332447b5, type: 3}
+    size: 2
+    minPerLevel: 15
+    maxPerLevel: 25
+    allowedOnPaths: 0
+  - id: Block_4x4_unmovable
+    prefab: {fileID: 7971481764295261197, guid: 188c905e62b7079498d1a8370ac02f61, type: 3}
+    size: 4
+    minPerLevel: 20
+    maxPerLevel: 30
+    allowedOnPaths: 0

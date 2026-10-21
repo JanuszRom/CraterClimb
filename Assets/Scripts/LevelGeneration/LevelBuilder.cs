@@ -2,21 +2,27 @@ using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
-/// Takes a LevelLayout (pure data) and instantiates your actual 3D block prefabs.
-/// Contains no generation/validation logic - it only reads the finished layout.
+/// Takes a LevelLayout (pure data) and instantiates the real prefabs from the shared palette.
+/// Structures and variants are instantiated as whole prefabs; the builder never assembles them.
+///
+/// Mapping: logical x -> world Z, logical y -> world Y, world X is the fixed wall depth.
+/// Every prefab's pivot is assumed to be the bottom-left corner of its bounding box.
 /// </summary>
 public class LevelBuilder : MonoBehaviour
 {
-    [Header("Source Layout")]
+    [Header("Source")]
     public LevelLayout layout;
+    [Tooltip("The same palette asset assigned to LevelGenerator.")]
+    public LevelPalette palette;
 
     [Header("Prefab Mapping")]
     public List<BlockSizeOption> blockPrefabs = new List<BlockSizeOption>();
 
     [Header("World Placement")]
     public float cellSize = 1f;
+    [Tooltip("Fixed world X offset of the whole wall.")]
+    public float wallDepth = 0f;
     public Transform container;
-
     private Dictionary<int, GameObject> prefabBySize;
 
     [ContextMenu("Build")]
@@ -27,18 +33,31 @@ public class LevelBuilder : MonoBehaviour
             Debug.LogError("[LevelBuilder] No LevelLayout assigned.");
             return;
         }
+        if (palette == null)
+        {
+            Debug.LogError("[LevelBuilder] No LevelPalette assigned.");
+            return;
+        }
 
         EnsureContainer();
         ClearBuilt();
-        BuildPrefabLookup();
 
-        foreach (var block in layout.blocks)
+        int built = 0;
+        foreach (GeneratedBlockData block in layout.blocks)
         {
-            if (!prefabBySize.TryGetValue(block.size, out GameObject prefab) || prefab == null)
+            
+            GameObject prefab = ResolvePrefab(block);
+            if (prefab == null)
             {
-                Debug.LogWarning($"[LevelBuilder] No prefab assigned for block size {block.size} (block id {block.id}). Skipping.");
+                Debug.LogWarning($"[LevelBuilder] No prefab found for block {block.id} ({block.category} '{block.prefabId}', size {block.width}x{block.height}). Skipping.");
                 continue;
             }
+
+            // A mirrored structure is flipped along Z around its pivot, so it extends
+            // toward -Z; shift the pivot to the far edge so it still fills its cells.
+            float worldZ = block.mirrored
+                ? (block.x + block.width) * cellSize
+                : block.x * cellSize;
 
             Vector3 worldPos = container.position + new Vector3(
                 0f,
@@ -47,10 +66,22 @@ public class LevelBuilder : MonoBehaviour
                 );
 
             GameObject instance = Instantiate(prefab, worldPos, Quaternion.identity, container);
-            instance.name = $"Block_{block.size}x{block.size}_{block.id}";
+
+            if (block.mirrored)
+            {
+                Vector3 s = instance.transform.localScale;
+                s.z = -s.z;
+                instance.transform.localScale = s;
+            }
+
+            instance.name = block.category == BlockCategory.Standard
+                ? $"Block_{block.width}x{block.height}_{block.id}"
+                : $"{block.prefabId}_{block.id}";
+
+            built++;
         }
 
-        Debug.Log($"[LevelBuilder] Built {layout.blocks.Count} blocks from layout '{layout.name}'.");
+        Debug.Log($"[LevelBuilder] Built {built}/{layout.blocks.Count} objects from layout '{layout.name}'.");
     }
 
     [ContextMenu("Clear Built Level")]
@@ -71,6 +102,19 @@ public class LevelBuilder : MonoBehaviour
         }
     }
 
+    private GameObject ResolvePrefab(GeneratedBlockData block)
+    {
+        switch (block.category)
+        {
+            case BlockCategory.Structure:
+                return palette.GetStructure(block.prefabId)?.prefab;
+            case BlockCategory.Variant:
+                return palette.GetVariant(block.prefabId)?.prefab;
+            default:
+                return palette.GetStandardPrefab(block.width);
+        }
+    }
+
     private void EnsureContainer()
     {
         if (container != null) return;
@@ -79,7 +123,6 @@ public class LevelBuilder : MonoBehaviour
         go.transform.SetParent(transform, false);
         container = go.transform;
     }
-
     private void BuildPrefabLookup()
     {
         prefabBySize = new Dictionary<int, GameObject>();

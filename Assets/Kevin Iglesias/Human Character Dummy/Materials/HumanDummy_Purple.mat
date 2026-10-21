@@ -10,7 +10,7 @@ Material:
   m_Name: HumanDummy_Purple
   m_Shader: {fileID: 10752, guid: 0000000000000000f000000000000000, type: 0}
   m_Parent: {fileID: 2100000, guid: aaddffe38381a60428eb1aeab1ba8b85, type: 2}
-  m_ModifiedSerializedProperties: 0
+  m_ModifiedSerializedProperties: 16
   m_ValidKeywords: []
   m_InvalidKeywords: []
   m_LightmapFlags: 4
