@@ -33,7 +33,7 @@ MonoBehaviour:
     - {x: 2, y: 3}
     entryCells:
     - {x: 1, y: 1}
-    allowMirror: 1
+    allowMirror: 0
   - id: StartPlatform
     prefab: {fileID: 4780416856777489683, guid: 4619367e5b229684c9271d83a2768e24, type: 3}
     width: 3
@@ -41,7 +41,7 @@ MonoBehaviour:
     freeCells: []
     entryCells:
     - {x: 0, y: 0}
-    allowMirror: 1
+    allowMirror: 0
   - id: KeyPlatform
     prefab: {fileID: 4780416856777489683, guid: 37c199e14aca5574b980b9320a1bd66b, type: 3}
     width: 3
@@ -49,23 +49,39 @@ MonoBehaviour:
     freeCells: []
     entryCells:
     - {x: 1, y: 0}
-    allowMirror: 1
+    allowMirror: 0
+  - id: Terrace
+    prefab: {fileID: 6642140490319662321, guid: 6df2d61aef9ed8e4bbea96a9df5fc08d, type: 3}
+    width: 6
+    height: 5
+    freeCells:
+    - {x: 0, y: 0}
+    - {x: 0, y: 2}
+    - {x: 0, y: 3}
+    - {x: 0, y: 4}
+    - {x: 5, y: 0}
+    - {x: 5, y: 2}
+    - {x: 5, y: 3}
+    - {x: 5, y: 4}
+    entryCells:
+    - {x: 1, y: 0}
+    allowMirror: 0
   variants:
   - id: Block_1x1_unmovable
     prefab: {fileID: 4345306969432709685, guid: 965d5a7ec06aa324584a4e4d7182e4d8, type: 3}
     size: 1
-    minPerLevel: 10
-    maxPerLevel: 25
+    minPerLevel: 100
+    maxPerLevel: 150
     allowedOnPaths: 0
   - id: Block_2x2_unmovable
     prefab: {fileID: 8368452078751255369, guid: 6e03cc124a94a2b4cb1215aa332447b5, type: 3}
     size: 2
-    minPerLevel: 15
-    maxPerLevel: 25
+    minPerLevel: 100
+    maxPerLevel: 150
     allowedOnPaths: 0
   - id: Block_4x4_unmovable
     prefab: {fileID: 7971481764295261197, guid: 188c905e62b7079498d1a8370ac02f61, type: 3}
     size: 4
-    minPerLevel: 20
-    maxPerLevel: 30
+    minPerLevel: 100
+    maxPerLevel: 150
     allowedOnPaths: 0
