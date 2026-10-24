@@ -20,9 +20,9 @@ public class Player : MonoBehaviour
     [SerializeField] private float selectRange = 10f;
 
     [SerializeField] private float wallRayDistance = 0.53f;
-    [SerializeField] private float wallRayHeight = -1f;
-    [SerializeField] private float wallPushStrength = 2.5f;
-    [SerializeField] private float wallFallSpeed = 1.5f;
+    [SerializeField] private float wallRayHeight = -1.05f;
+    [SerializeField] private float wallPushStrength = 15f;
+    [SerializeField] private float wallFallSpeed = 1f;
     [SerializeField] private float gravityMultiplier = 2f;
     [SerializeField] private float hardLandSpeed = 5f;
     [SerializeField] private float landRecoveryTime = .15f;
@@ -92,11 +92,11 @@ public class Player : MonoBehaviour
     private void Update()
     {
         HandleMovement();
-        HandleInteractions();
+        HandleWallSelection();
 
     }
 
-    private void HandleInteractions()
+    private void HandleWallSelection()
     {
 
         Ray cameraRay = new Ray(playerCamera.transform.position, playerCamera.transform.forward);
