@@ -16,6 +16,7 @@ public class CameraTarget : MonoBehaviour
     [Header("Cinemachine")]
     [SerializeField] private CinemachineCamera freeCamera;
     [SerializeField] private CinemachineCamera aimCamera;
+    [SerializeField] private GameObject crosshair;
     private int activePriority = 20;
     private int inactivePriority = 10;
     public float Yaw { get; private set; }
@@ -53,6 +54,7 @@ public class CameraTarget : MonoBehaviour
     public void SetAiming(bool aiming)
     {
         IsAiming = aiming;
+        crosshair.SetActive(aiming);
         freeCamera.Priority = aiming ? inactivePriority : activePriority;
         aimCamera.Priority = aiming ? activePriority : inactivePriority;
         
