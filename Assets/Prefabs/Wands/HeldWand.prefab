@@ -105,5 +105,40 @@ PrefabInstance:
     - {fileID: 7545279178942432836, guid: 28224b8deece816488c24601a3585425, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 2866663587614021436, guid: 28224b8deece816488c24601a3585425, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 2933158957844778446}
   m_SourcePrefab: {fileID: 100100000, guid: 28224b8deece816488c24601a3585425, type: 3}
+--- !u!1 &2050131536062995943 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2866663587614021436, guid: 28224b8deece816488c24601a3585425, type: 3}
+  m_PrefabInstance: {fileID: 4304289630487546587}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &2933158957844778446
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2050131536062995943}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6af9886cd8bc9bd4da79fcf08513a763, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::WandShooterter
+  muzzle: {fileID: 2254749739506121725}
+  projectilePrefab: {fileID: -2955999929810075380, guid: 2bfddedb395d08249a7d611f623c6857, type: 3}
+  aimMask:
+    serializedVersion: 2
+    m_Bits: 119
+  maxAimDistance: 100
+  cooldown: 0.5
+  shotSpeed: 20
+  minFlightTime: 0.5
+  maxFlightTime: 2
+--- !u!4 &2254749739506121725 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 2662069847360352550, guid: 28224b8deece816488c24601a3585425, type: 3}
+  m_PrefabInstance: {fileID: 4304289630487546587}
+  m_PrefabAsset: {fileID: 0}
